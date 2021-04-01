@@ -2,6 +2,10 @@
 const user = require("./cmds_user.js");
 const quiz = require("./cmds_quiz.js");
 const favs = require("./cmds_favs.js");
+const score = require("./cmds_score.js");
+
+//const play = require("./cmds_play.js");
+
 const readline = require('readline');
 
 const rl = readline.createInterface({
@@ -9,7 +13,9 @@ const rl = readline.createInterface({
   output: process.stdout,
   prompt: "> "
 });
+
 rl.log = (msg) => console.log(msg);  // Add log to rl interface
+
 rl.questionP = function (string) {   // Add questionP to rl interface
   return new Promise ( (resolve) => {
     this.question(`  ${string}: `, (answer) => resolve(answer.trim()))
@@ -41,6 +47,13 @@ rl.on('line', async (line) => {
     else if (['cf', 'fc'].includes(cmd))      { await favs.create(rl);}
     else if (['df', 'fd'].includes(cmd))      { await favs.delete(rl);}
 
+   
+    else if (['p' ].includes(cmd))         { await quiz.inicio_juego(rl);}
+    else if (['play'     ].includes(cmd))     { await quiz.play(rl);}
+
+    else if (['ls'     ].includes(cmd))     { await score.list(rl);}
+    
+
     else if ('e'===cmd)  { rl.log('Bye!'); process.exit(0);}
     else                 {  rl.log('UNSUPPORTED COMMAND!');
                             user.help(rl);
@@ -48,3 +61,4 @@ rl.on('line', async (line) => {
     } catch (err) { rl.log(`  ${err}`);}
     finally       { rl.prompt(); }
   });
+
